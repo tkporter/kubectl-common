@@ -8,8 +8,8 @@ import (
   "path"
 
   aliasConfig "github.com/tkporter/kubectl-common/src/alias-config"
+  genericConfig "github.com/tkporter/kubectl-common/src/generic-config"
 
-  homedir "github.com/mitchellh/go-homedir"
   "github.com/spf13/viper"
 )
 
@@ -30,7 +30,7 @@ func GetAliasConfigPath() (string, error) {
   if err != nil {
     return "", err
   }
-  return config.GetString("current"), nil
+  return config.GetString("aliasConfigPath"), nil
 }
 
 // Sets the path to the alias config in the internal config.
@@ -126,11 +126,10 @@ func createDefaultConfig(dirPath, entirePath string) error {
 
 // Gets the path of the internal config
 func getConfigPath() (dirPath string, entirePath string, err error) {
-  home, err := homedir.Dir()
+  dirPath, err = genericConfig.GetConfigDirPath()
   if err != nil {
     return "", "", err
   }
-  dirPath = path.Join(home, ".kube", "kube-common")
   entirePath = path.Join(dirPath, fmt.Sprintf("%s.json", configFileName))
   return dirPath, entirePath, nil
 }

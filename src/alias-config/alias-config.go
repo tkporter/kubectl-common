@@ -2,7 +2,9 @@ package alias_config
 
 import (
   "fmt"
+  "path"
 
+  genericConfig "github.com/tkporter/kubectl-common/src/generic-config"
   kubectlManager "github.com/tkporter/kubectl-common/src/kubectl-manager"
 
   "github.com/spf13/viper"
@@ -24,6 +26,7 @@ func GetVersionForAlias(aliasConfigPath, alias string) (string, error) {
 
 // Applies the alias and kubectl versions found in the alias config.
 // Calls functions to ensure the proper kubectl versions are downloaded.
+// Returns the directory of the config file and any errors
 func ApplyAliasConfig(aliasConfigPath string) (string, error) {
   aliasConfig, err := LoadConfig(aliasConfigPath)
   if err != nil {
@@ -31,7 +34,7 @@ func ApplyAliasConfig(aliasConfigPath string) (string, error) {
   }
   aliases := aliasConfig.GetStringMapString("aliases")
   applyAliases(aliases)
-  return aliasConfig.ConfigFileUsed(), nil
+  return path.Dir(aliasConfig.ConfigFileUsed()), nil
 }
 
 // Loads the alias config
@@ -41,7 +44,11 @@ func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
   if aliasConfigPath != "" {
     aliasConfig.AddConfigPath(aliasConfigPath)
   } else {
-    aliasConfig.AddConfigPath(".")
+    dirPath, err := genericConfig.GetConfigDirPath()
+    if err != nil {
+      return nil, err
+    }
+    aliasConfig.AddConfigPath(dirPath)
   }
   aliasConfig.SetConfigName("alias-config")
 

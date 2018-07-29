@@ -19,7 +19,7 @@ var cmdApplyAliasConfig = &cobra.Command{
 }
 
 func init() {
-  cmdApplyAliasConfig.Flags().StringVarP(&AliasConfigPath, "config-dir", "d", "", "The directory to read the alias config from")
+  cmdApplyAliasConfig.Flags().StringVarP(&AliasConfigPath, "dir", "d", "", "The directory to read the alias config from")
   RootCmd.AddCommand(cmdApplyAliasConfig)
 }
 

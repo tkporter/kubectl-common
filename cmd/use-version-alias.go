@@ -27,7 +27,7 @@ func useVersionAlias(cmd *cobra.Command, args []string) {
   alias := args[0]
   err := internalConfig.SetCurrentVersionAlias(alias)
   if err != nil {
-    fmt.Println("Error:", err)
+    fmt.Println("Error setting version alias:", err)
     os.Exit(1)
   }
   alias, version, err := internalConfig.GetCurrentVersionAlias()
