@@ -57,12 +57,16 @@ Once an alias has been selected using `use-version-alias`, we can just use
 
 ```
 $ kubectl-common version
-# stuff
+# verify we are using the right kubectl version!
 $ kubectl-common get pods
+# stuff
+$ kubectl-common get deployments
 # things
 ```
 
-#### Quirks
+### Quirks
+
+This will probably be fixed soon, but:
 
 `kubectl-common --help` will show the help for `kubectl-common`, rather than
 that of `kubectl`.
