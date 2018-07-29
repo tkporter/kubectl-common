@@ -21,6 +21,8 @@ func init() {
   RootCmd.AddCommand(cmdUseVersionAlias)
 }
 
+// Configures kubectl-common to use the kubectl version corresponding to an
+// alias found in the alias config.
 func useVersionAlias(cmd *cobra.Command, args []string) {
   alias := args[0]
   err := internalConfig.SetCurrentVersionAlias(alias)

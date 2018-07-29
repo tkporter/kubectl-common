@@ -14,7 +14,7 @@ var AliasConfigPath string
 var cmdApplyAliasConfig = &cobra.Command{
   Use:   "apply-alias-config",
   Short: "Apply an alias config",
-  Long: "Apply an alias config",
+  Long: "Applies an alias config and downloads any necessary versions of kubectl.",
   Run: applyAliasConfig,
 }
 
@@ -23,13 +23,17 @@ func init() {
   RootCmd.AddCommand(cmdApplyAliasConfig)
 }
 
+// Gets all kubectl versions that are needed and saves the path of the
+// alias config to the internal config.
 func applyAliasConfig(cmd *cobra.Command, args []string) {
+  // Get all kubectl versions we need
   aliasConfigPath, err := aliasConfig.ApplyAliasConfig(AliasConfigPath)
   if err != nil {
     fmt.Println("Error applying alias config:", err)
   }
+  // Save the path of the alias config to the internal config
   err = internalConfig.SetAliasConfigPath(aliasConfigPath)
   if err != nil {
-    fmt.Println("Error applying alias config:", err)
+    fmt.Println("Error saving the alias config path:", err)
   }
 }

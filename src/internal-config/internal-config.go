@@ -24,6 +24,7 @@ var defaultConfig = []byte(`{
 }
 `)
 
+// Gets the path to the alias config found in the internal config.
 func GetAliasConfigPath() (string, error) {
   config, err := LoadConfig()
   if err != nil {
@@ -32,6 +33,7 @@ func GetAliasConfigPath() (string, error) {
   return config.GetString("current"), nil
 }
 
+// Sets the path to the alias config in the internal config.
 func SetAliasConfigPath(aliasConfigPath string) error {
   config, err := LoadConfig()
   if err != nil {
@@ -42,6 +44,7 @@ func SetAliasConfigPath(aliasConfigPath string) error {
   return nil
 }
 
+// Gets the currently used alias & corresponding version
 func GetCurrentVersionAlias() (alias, version string, err error) {
   config, err := LoadConfig()
   if err != nil {
@@ -51,6 +54,7 @@ func GetCurrentVersionAlias() (alias, version string, err error) {
   return current["alias"], current["version"], nil
 }
 
+// Sets the new alias & version to use
 func SetCurrentVersionAlias(alias string) error {
   aliasConfigPath, err := GetAliasConfigPath()
   if err != nil {
@@ -70,6 +74,7 @@ func SetCurrentVersionAlias(alias string) error {
   return nil
 }
 
+// Loads the internal config
 func LoadConfig() (*viper.Viper, error) {
   dirPath, entirePath, err := getConfigPath()
   if err != nil {
@@ -98,6 +103,8 @@ func LoadConfig() (*viper.Viper, error) {
   return config, nil
 }
 
+// Intended to be used if the config does not exist. Creates the necessary
+// path to the config and initializes the config as the defaultConfig.
 func createDefaultConfig(dirPath, entirePath string) error {
   // make sure the file path is there
   err := os.MkdirAll(dirPath, dirFileMode)
@@ -117,6 +124,7 @@ func createDefaultConfig(dirPath, entirePath string) error {
   return err
 }
 
+// Gets the path of the internal config
 func getConfigPath() (dirPath string, entirePath string, err error) {
   home, err := homedir.Dir()
   if err != nil {

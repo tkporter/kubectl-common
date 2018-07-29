@@ -8,6 +8,7 @@ import (
   "github.com/spf13/viper"
 )
 
+// Finds the version corresponding to an alias found in the alias config.
 func GetVersionForAlias(aliasConfigPath, alias string) (string, error) {
   aliasConfig, err := LoadConfig(aliasConfigPath)
   if err != nil {
@@ -17,10 +18,12 @@ func GetVersionForAlias(aliasConfigPath, alias string) (string, error) {
   if version, ok := aliases[alias]; ok {
     return version, nil
   } else {
-    return "", fmt.Errorf("Alias %s not found in config", alias)
+    return "", fmt.Errorf("Alias %s not found in the alias config", alias)
   }
 }
 
+// Applies the alias and kubectl versions found in the alias config.
+// Calls functions to ensure the proper kubectl versions are downloaded.
 func ApplyAliasConfig(aliasConfigPath string) (string, error) {
   aliasConfig, err := LoadConfig(aliasConfigPath)
   if err != nil {
@@ -31,6 +34,7 @@ func ApplyAliasConfig(aliasConfigPath string) (string, error) {
   return aliasConfig.ConfigFileUsed(), nil
 }
 
+// Loads the alias config
 func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
   aliasConfig := viper.New()
   // TODO change up from "." to something else
@@ -47,6 +51,8 @@ func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
   return aliasConfig, nil
 }
 
+// Ensures there are no repeats in the versions specified by the aliases,
+// and sets up the kubectl versions.
 func applyAliases(aliases map[string]string) {
   versionMap := make(map[string]bool)
   for _, version := range aliases {

@@ -25,7 +25,9 @@ func Execute() {
   }
 }
 
+// Runs a command with the previously configured version of kubectl.
 func runKubectlCommand(cmd *cobra.Command, args []string) {
+  // Get the alias & version that was configured earlier
   alias, version, err := internalConfig.GetCurrentVersionAlias()
   if err != nil {
     fmt.Println("Error getting alias version", err)
