@@ -4,7 +4,7 @@ A wrapper around `kubectl` to easily switch between versions.
 
 ## Alias Configuration
 
-`kubectl-common` uses aliases to versions to easily switch between versions
+`kubectl-common` uses aliases of versions to easily switch between versions
 without needing to memorize the numeric `x.x.x` version of `kubectl` needed.
 
 Aliases are defined in an `alias-config.json` file. Here's an example of what
@@ -15,13 +15,15 @@ it would look like:
   "aliases": {
     "foo": "1.8.4",
     "bar": "1.10.0",
-    "baz": "1.11.1"
+    "baz": "1.11.1",
+    "zoo": "1.11.1"
   }
 }
 ```
 
 Where the alias "foo" would correspond to `kubectl` version `1.8.4`, "bar" to
-version `1.10.0`, etc.
+version `1.10.0`, etc. It's fine to have more than one alias with the same
+version.
 
 ## Usage
 
@@ -29,7 +31,7 @@ version `1.10.0`, etc.
 
 To apply an `alias-config.json`, run:
 
-```bash
+```
 $ kubectl-common apply-alias-config
 ```
 
@@ -43,7 +45,7 @@ running `kubectl-common apply-alias-config` again in the future.
 
 We can change our current kubectl version to use by:
 
-```bash
+```
 $ kubectl-common use-version-alias foo
 Now using alias foo for kubectl version 1.8.4
 ```
@@ -53,7 +55,7 @@ Now using alias foo for kubectl version 1.8.4
 Once an alias has been selected using `use-version-alias`, we can just use
 `kubectl-common` as if it were `kubectl` directly:
 
-```bash
+```
 $ kubectl-common version
 # stuff
 $ kubectl-common get pods
