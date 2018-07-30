@@ -100,5 +100,6 @@ This includes if you want to view a help message for a command in `kubectl`:
 ### Next Steps
 
 Short term goals:
+* Add tests
 * Support & test on platforms other than macOS
 * Allow `~` usage in the alias config for kubeconfigs
