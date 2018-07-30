@@ -44,7 +44,6 @@ func ApplyAliasConfig(aliasConfigPath string) (string, error) {
 // Loads the alias config
 func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
   aliasConfig := viper.New()
-  // TODO change up from "." to something else
   if aliasConfigPath != "" {
     aliasConfig.AddConfigPath(aliasConfigPath)
   } else {

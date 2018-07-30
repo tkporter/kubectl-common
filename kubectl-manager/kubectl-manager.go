@@ -96,7 +96,6 @@ func getExistingKubectlVersions() (map[string]string, error) {
 }
 
 // Gets the version of an existing kubectl at kcPath
-// TODO(tkporter): better error handling?
 func getKubectlVersion(kcPath string) (string, error) {
   versionOutput, err := exec.Command(kcPath, "version", "--client", "--short").Output()
   if err != nil {
