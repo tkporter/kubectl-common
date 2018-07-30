@@ -66,7 +66,7 @@ running `kubectl-common apply-alias-config` again in the future.
 
 ### Switching Aliases
 
-We can change our current kubectl version to use by:
+We can change our current kubectl version/kubeconfig configuration by:
 
 ```
 $ kubectl-common use-alias foo
@@ -88,8 +88,6 @@ $ kubectl-common get deployments
 ```
 
 ### Quirks
-
-This will probably be fixed soon, but:
 
 `kubectl-common --help` will show the help for `kubectl-common`, rather than
 that of `kubectl`.
