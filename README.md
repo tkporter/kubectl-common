@@ -48,7 +48,8 @@ kubeconfig `/Users/johnsmith/.kube/config_foo`, "bar" to version `1.10.0` and
 kubeconfig `/Users/johnsmith/.kube/config_bar`, etc. It's fine to have more
 than one alias with the same version.
 
-Note that absolute paths are required for the `kubeconfig` (`~` is not supported).
+Note that full absolute paths are required for the `kubeconfig` (`~` is not
+supported).
 
 ## Usage
 
