@@ -1,11 +1,19 @@
 # kubectl-common
 
-A wrapper around `kubectl` to easily switch between versions.
+A wrapper around `kubectl` to easily switch between kubectl versions and
+kubeconfigs.
+
+`kubectl-common` uses aliases to refer to configurations that provide the
+required kubectl version and kubeconfig path.
+
+This tool is useful for:
+* Switching between clusters that require different kubeconfig files. Explicitly
+changing the kubeconfig path can be tedious.
+* Switching between clusters that require different versions of kubectl.
+Using different kubectl command names for different versions is annoying and
+easy to mess up.
 
 ## Alias Configuration
-
-`kubectl-common` uses aliases of versions to easily switch between versions
-without needing to memorize the numeric `x.x.x` version of `kubectl` needed.
 
 Aliases are defined in an `alias-config.json` file. Here's an example of what
 it would look like:
@@ -13,10 +21,22 @@ it would look like:
 ```json
 {
   "aliases": {
-    "foo": "1.8.4",
-    "bar": "1.10.0",
-    "baz": "1.11.1",
-    "zoo": "1.11.1"
+    "foo": {
+      "version": "1.8.4",
+      "kubeconfig": "/Users/johnsmith/.kube/config_foo"
+    },
+    "bar": {
+      "version": "1.10.0",
+      "kubeconfig": "/Users/johnsmith/.kube/config_bar"
+    },
+    "baz": {
+      "version": "1.11.1",
+      "kubeconfig": "/Users/johnsmith/.kube/config_baz"
+    },
+    "zoo": {
+      "version": "1.11.1",
+      "kubeconfig": "/Users/johnsmith/.kube/config_zoo"
+    },
   }
 }
 ```
@@ -44,18 +64,18 @@ the directory using the `-d` or `--dir` flag. Once this command is run,
 you won't need to re-specify the directory of the alias config unless if
 running `kubectl-common apply-alias-config` again in the future.
 
-### Switching Version Aliases
+### Switching Aliases
 
 We can change our current kubectl version to use by:
 
 ```
-$ kubectl-common use-version-alias foo
-Now using alias foo for kubectl version 1.8.4
+$ kubectl-common use-alias foo
+Now using alias foo for kubectl version 1.8.4 and kubeconfig /Users/johnsmith/.kube/config_foo
 ```
 
 ### Performing Normal kubectl Commands
 
-Once an alias has been selected using `use-version-alias`, we can just use
+Once an alias has been selected using `use-alias`, we can just use
 `kubectl-common` as if it were `kubectl` directly:
 
 ```
@@ -78,3 +98,9 @@ If you want to view `kubectl`'s help message, use `kubectl-common -- --help`.
 
 This includes if you want to view a help message for a command in `kubectl`:
 `kubectl-common -- get --help`.
+
+### Next Steps
+
+Short term goals:
+* Support & test on platforms other than macOS
+* Allow `~` usage in the alias config for kubeconfigs
