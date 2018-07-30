@@ -10,9 +10,9 @@ import (
 )
 
 var cmdUseVersionAlias = &cobra.Command{
-  Use:   "use-version-alias [alias]",
-  Short: "Apply an alias config",
-  Long: "Apply an alias config",
+  Use:   "use-alias [alias]",
+  Short: "Change to the configuration for an alias",
+  Long: "Sets the current configuration to the alias's version and kubeconfig.",
   Args: cobra.ExactArgs(1),
   Run: useVersionAlias,
 }
@@ -25,11 +25,11 @@ func init() {
 // alias found in the alias config.
 func useVersionAlias(cmd *cobra.Command, args []string) {
   alias := args[0]
-  err := internalConfig.SetCurrentVersionAlias(alias)
+  err := internalConfig.SetCurrentConfiguration(alias)
   if err != nil {
     fmt.Println("Error setting version alias:", err)
     os.Exit(1)
   }
-  alias, version, err := internalConfig.GetCurrentVersionAlias()
-  fmt.Printf("Now using alias %s for kubectl version %s\n", alias, version)
+  alias, version, kubeconfig, err := internalConfig.GetCurrentConfiguration()
+  fmt.Printf("Now using alias %s for kubectl version %s and kubeconfig %s\n", alias, version, kubeconfig)
 }

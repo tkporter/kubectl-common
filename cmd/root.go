@@ -28,11 +28,10 @@ func Execute() {
 // Runs a command with the previously configured version of kubectl.
 func runKubectlCommand(cmd *cobra.Command, args []string) {
   // Get the alias & version that was configured earlier
-  alias, version, err := internalConfig.GetCurrentVersionAlias()
+  _, version, kubeconfig, err := internalConfig.GetCurrentConfiguration()
   if err != nil {
-    fmt.Println("Error getting alias version", err)
+    fmt.Println("Error getting alias configuration", err)
     os.Exit(1)
   }
-  fmt.Printf("Using alias %s for kubectl version %s\n", alias, version)
-  kubectlManager.RunKubectlCommand(version, args)
+  kubectlManager.RunKubectlCommand(version, kubeconfig, args)
 }

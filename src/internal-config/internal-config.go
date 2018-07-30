@@ -19,7 +19,8 @@ var defaultConfig = []byte(`{
   "aliasConfigPath": "",
   "current": {
     "alias": "",
-    "version": ""
+    "version": "",
+    "kubeconfig": ""
   }
 }
 `)
@@ -45,22 +46,22 @@ func SetAliasConfigPath(aliasConfigPath string) error {
 }
 
 // Gets the currently used alias & corresponding version
-func GetCurrentVersionAlias() (alias, version string, err error) {
+func GetCurrentConfiguration() (alias, version, kubeconfig string, err error) {
   config, err := LoadConfig()
   if err != nil {
-    return "", "", err
+    return "", "", "", err
   }
   current := config.GetStringMapString("current")
-  return current["alias"], current["version"], nil
+  return current["alias"], current["version"], current["kubeconfig"], nil
 }
 
 // Sets the new alias & version to use
-func SetCurrentVersionAlias(alias string) error {
+func SetCurrentConfiguration(alias string) error {
   aliasConfigPath, err := GetAliasConfigPath()
   if err != nil {
     return err
   }
-  version, err := aliasConfig.GetVersionForAlias(aliasConfigPath, alias)
+  version, kubeconfig, err := aliasConfig.GetConfigurationForAlias(aliasConfigPath, alias)
   if err != nil {
     return err
   }
@@ -70,6 +71,7 @@ func SetCurrentVersionAlias(alias string) error {
   }
   config.Set("current.alias", alias)
   config.Set("current.version", version)
+  config.Set("current.kubeconfig", kubeconfig)
   config.WriteConfig()
   return nil
 }

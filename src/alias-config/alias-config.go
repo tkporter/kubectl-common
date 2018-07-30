@@ -11,16 +11,17 @@ import (
 )
 
 // Finds the version corresponding to an alias found in the alias config.
-func GetVersionForAlias(aliasConfigPath, alias string) (string, error) {
+func GetConfigurationForAlias(aliasConfigPath, alias string) (version, kubeconfig string, err error) {
   aliasConfig, err := LoadConfig(aliasConfigPath)
   if err != nil {
-    return "", err
+    return "", "", err
   }
-  aliases := aliasConfig.GetStringMapString("aliases")
-  if version, ok := aliases[alias]; ok {
-    return version, nil
+  aliases := aliasConfig.GetStringMap("aliases")
+  if configurationInterface, ok := aliases[alias]; ok {
+    configuration := configurationInterface.(map[string]interface{})
+    return configuration["version"].(string), configuration["kubeconfig"].(string), nil
   } else {
-    return "", fmt.Errorf("Alias %s not found in the alias config", alias)
+    return "", "", fmt.Errorf("Alias %s not found in the alias config", alias)
   }
 }
 
@@ -32,7 +33,7 @@ func ApplyAliasConfig(aliasConfigPath string) (string, error) {
   if err != nil {
     return "", err
   }
-  aliases := aliasConfig.GetStringMapString("aliases")
+  aliases := aliasConfig.GetStringMap("aliases")
   applyAliases(aliases)
   return path.Dir(aliasConfig.ConfigFileUsed()), nil
 }
@@ -60,10 +61,11 @@ func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
 
 // Ensures there are no repeats in the versions specified by the aliases,
 // and sets up the kubectl versions.
-func applyAliases(aliases map[string]string) {
+func applyAliases(aliases map[string]interface{}) {
   versionMap := make(map[string]bool)
-  for _, version := range aliases {
-    versionMap[version] = true
+  for _, aliasConfigurationInterface := range aliases {
+    aliasConfiguration := aliasConfigurationInterface.(map[string]interface{})
+    versionMap[aliasConfiguration["version"].(string)] = true
   }
   kubectlManager.SetupKubectlVersions(versionMap)
 }

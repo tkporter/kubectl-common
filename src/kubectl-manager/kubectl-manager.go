@@ -16,11 +16,11 @@ var kubectlPath = path.Join(baseBinPath, "kubectl")
 var executableFileMode = os.FileMode(0755)
 
 // Executes a command defined by args using kubectl version `version`
-func RunKubectlCommand(version string, args []string) {
+func RunKubectlCommand(version, kubeconfig string, args []string) {
   kubectlPath := getVersionedKubectlPath(version)
-  argsWithKubectl := append([]string{ kubectlPath }, args...)
+  fullArgs := append([]string{ kubectlPath, "--kubeconfig", kubeconfig }, args...)
 
-  err := syscall.Exec(kubectlPath, argsWithKubectl, os.Environ())
+  err := syscall.Exec(kubectlPath, fullArgs, os.Environ())
   if err != nil {
     panic(err)
   }
