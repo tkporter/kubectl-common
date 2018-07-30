@@ -7,9 +7,11 @@ kubeconfigs.
 required kubectl version and kubeconfig path.
 
 This tool is useful for:
-* Switching between clusters that require different kubeconfig files. Explicitly
-changing the kubeconfig path can be tedious.
-* Switching between clusters that require different versions of kubectl.
+* **Switching between clusters that require different kubeconfig files.** Changing
+the kubeconfig path can be tedious, annoying when dealing with multiple
+terminals (if using env variable KUBECONFIG), and verbose if explicitly using the
+--kubeconfig flag with kubectl.
+* **Switching between clusters that require different versions of kubectl.**
 Using different kubectl command names for different versions is annoying and
 easy to mess up.
 
@@ -36,14 +38,15 @@ it would look like:
     "zoo": {
       "version": "1.11.1",
       "kubeconfig": "/Users/johnsmith/.kube/config_zoo"
-    },
+    }
   }
 }
 ```
 
-Where the alias "foo" would correspond to `kubectl` version `1.8.4`, "bar" to
-version `1.10.0`, etc. It's fine to have more than one alias with the same
-version.
+Where the alias "foo" would correspond to `kubectl` version `1.8.4` and
+kubeconfig `/Users/johnsmith/.kube/config_foo`, "bar" to version `1.10.0` and
+kubeconfig `/Users/johnsmith/.kube/config_bar`, etc. It's fine to have more
+than one alias with the same version.
 
 ## Usage
 
