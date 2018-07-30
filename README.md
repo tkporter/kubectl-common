@@ -27,6 +27,9 @@ version.
 
 ## Usage
 
+For the easiest experience, it's recommended to rename `kubectl-common` to
+`kubectl`.
+
 ### Applying an Alias Config
 
 To apply an `alias-config.json`, run:
