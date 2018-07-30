@@ -7,8 +7,8 @@ kubeconfigs.
 required kubectl version and kubeconfig path.
 
 This tool is useful for:
-* **Switching between clusters that require different kubeconfig files.** Changing
-the kubeconfig path can be tedious, annoying when dealing with multiple
+* **Switching between clusters that require different kubeconfig files.**
+Changing the kubeconfig path can be tedious, annoying when dealing with multiple
 terminals (if using env variable KUBECONFIG), and verbose if explicitly using the
 --kubeconfig flag with kubectl.
 * **Switching between clusters that require different versions of kubectl.**
@@ -47,6 +47,8 @@ Where the alias "foo" would correspond to `kubectl` version `1.8.4` and
 kubeconfig `/Users/johnsmith/.kube/config_foo`, "bar" to version `1.10.0` and
 kubeconfig `/Users/johnsmith/.kube/config_bar`, etc. It's fine to have more
 than one alias with the same version.
+
+Note that absolute paths are required for the `kubeconfig` (`~` is not supported).
 
 ## Usage
 
@@ -105,4 +107,6 @@ This includes if you want to view a help message for a command in `kubectl`:
 Short term goals:
 * Add tests
 * Support & test on platforms other than macOS
-* Allow `~` usage in the alias config for kubeconfigs
+* Allow `~` usage in the alias config for kubeconfigs. This has to do with
+the way we're executing the actual kubectl command because bash is required to
+replacing `~` with `$HOME`.
