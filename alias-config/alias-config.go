@@ -34,7 +34,10 @@ func ApplyAliasConfig(aliasConfigPath string) (string, error) {
     return "", err
   }
   aliases := aliasConfig.GetStringMap("aliases")
-  applyAliases(aliases)
+  err = applyAliases(aliases)
+  if err != nil {
+    return "", err
+  }
   return path.Dir(aliasConfig.ConfigFileUsed()), nil
 }
 
@@ -61,11 +64,12 @@ func LoadConfig(aliasConfigPath string) (*viper.Viper, error) {
 
 // Ensures there are no repeats in the versions specified by the aliases,
 // and sets up the kubectl versions.
-func applyAliases(aliases map[string]interface{}) {
+func applyAliases(aliases map[string]interface{}) error {
   versionMap := make(map[string]bool)
   for _, aliasConfigurationInterface := range aliases {
     aliasConfiguration := aliasConfigurationInterface.(map[string]interface{})
     versionMap[aliasConfiguration["version"].(string)] = true
   }
-  kubectlManager.SetupKubectlVersions(versionMap)
+  // returns error
+  return kubectlManager.SetupKubectlVersions(versionMap)
 }

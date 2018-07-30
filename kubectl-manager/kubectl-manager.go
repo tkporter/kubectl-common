@@ -7,7 +7,9 @@ import (
   "os"
   "os/exec"
   "path"
+  "path/filepath"
   "regexp"
+  "strings"
   "syscall"
 )
 
@@ -16,22 +18,27 @@ var kubectlPath = path.Join(baseBinPath, "kubectl")
 var executableFileMode = os.FileMode(0755)
 
 // Executes a command defined by args using kubectl version `version`
-func RunKubectlCommand(version, kubeconfig string, args []string) {
+func RunKubectlCommand(version, kubeconfig string, args []string) error {
   kubectlPath := getVersionedKubectlPath(version)
   fullArgs := append([]string{ kubectlPath, "--kubeconfig", kubeconfig }, args...)
 
-  err := syscall.Exec(kubectlPath, fullArgs, os.Environ())
-  if err != nil {
-    panic(err)
-  }
+  // returns error
+  return syscall.Exec(kubectlPath, fullArgs, os.Environ())
 }
 
 // Ensures there is a local copy of kubectl for each version in the map
-func SetupKubectlVersions(versions map[string]bool) {
-  existingVersion := getExistingKubectlVersion()
-  for version := range versions {
-    setupKubectlVersion(version, existingVersion)
+func SetupKubectlVersions(versions map[string]bool) error {
+  existingVersions, err := getExistingKubectlVersions()
+  if err != nil {
+    return err
   }
+  for version := range versions {
+    err := setupKubectlVersion(version, existingVersions)
+    if err != nil {
+      return err
+    }
+  }
+  return nil
 }
 
 // Gets the entire path of a kubectl for a particular version
@@ -42,39 +49,65 @@ func getVersionedKubectlPath(version string) string {
 // Downloads the kubectl for a particular version if not found locally.
 // If the kubectl for a version is found locally, it's copied to the desired
 // path.
-// TODO(tkporter): check the versioned kubectl path as well. Better error handling?
-func setupKubectlVersion(version, existingVersion string) {
+func setupKubectlVersion(version string, existingVersions map[string]string) error {
   newKubeVersionPath := getVersionedKubectlPath(version)
 
-  // If we already have one of the existing versions, just rename it
-  if existingVersion == version {
-    fmt.Printf("kubectl v%s found at %s\nCopying existing file to %s\n\n", version, kubectlPath, newKubeVersionPath)
-    copyFile(kubectlPath, newKubeVersionPath)
+  // If we already have one of the existing versions, rename it if the path
+  // is bad (not in proper kubectl_vX.X.X format) or just continue if the path
+  // is already correct
+  if kcPath, ok := existingVersions[version]; ok {
+    fmt.Printf("kubectl v%s found at %s\n", version, kcPath)
+    if kcPath == newKubeVersionPath {
+      fmt.Printf("Path is proper version format, continuing.\n\n")
+    } else {
+      fmt.Printf("Copying existing file to %s\n\n", newKubeVersionPath)
+      copyFile(kubectlPath, newKubeVersionPath)
+    }
   } else {
     fmt.Printf("Downloading kubectl v%s to %s\n\n", version, newKubeVersionPath)
     err := downloadFile(newKubeVersionPath, getKubectlDownloadUrl(version))
     if err != nil {
-      panic(err)
+      return err
     }
   }
-  // Ensure the kubectl is executable
-  err := os.Chmod(newKubeVersionPath, executableFileMode)
-  if err != nil {
-    panic(err)
-  }
+  // Ensure the kubectl is executable, returns err
+  return os.Chmod(newKubeVersionPath, executableFileMode)
 }
 
-// Gets the version of an existing kubectl at kubectlPath
-// TODO(tkporter): better error handling? Maybe extend to versioned paths too?
-func getExistingKubectlVersion() string {
-  versionOutput, err := exec.Command(kubectlPath, "version", "--client", "--short").Output()
+// Gets all existing versions of the form `${kubectlPath}_v*`, and returns
+// a map with versions as keys and full paths of the files as values
+func getExistingKubectlVersions() (map[string]string, error) {
+  matches, err := filepath.Glob(strings.Join([]string{ kubectlPath, "_v*" }, ""))
   if err != nil {
-    panic(err)
-    return ""
+    return nil, err
+  }
+  versionMap := make(map[string]string)
+  _ = versionMap
+  for _, kcPath := range matches {
+    version, err := getKubectlVersion(kcPath)
+    if err != nil {
+      // Error getting version of existing kubectl, just ignore because
+      // we will just redownload if this version is needed by our config file
+      continue
+    }
+    versionMap[version] = kcPath
+  }
+  return versionMap, nil
+}
+
+// Gets the version of an existing kubectl at kcPath
+// TODO(tkporter): better error handling?
+func getKubectlVersion(kcPath string) (string, error) {
+  versionOutput, err := exec.Command(kcPath, "version", "--client", "--short").Output()
+  if err != nil {
+    return "", err
   }
   re := regexp.MustCompile("\\d+\\.\\d+\\.\\d+")
   existingVersion := re.FindString(string(versionOutput))
-  return existingVersion
+  if existingVersion == "" {
+    return "", fmt.Errorf("No valid version found")
+  }
+  return existingVersion, nil
 }
 
 // Returns the url to download a particular version of kubectl

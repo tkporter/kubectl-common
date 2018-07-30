@@ -36,4 +36,5 @@ func applyAliasConfig(cmd *cobra.Command, args []string) {
   if err != nil {
     fmt.Println("Error saving the alias config path:", err)
   }
+  fmt.Println("Successfully applied alias config.")
 }
