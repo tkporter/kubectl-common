@@ -15,6 +15,14 @@ terminals (if using env variable KUBECONFIG), and verbose if explicitly using th
 Using different kubectl command names for different versions is annoying and
 easy to mess up.
 
+## Getting kubectl-common
+
+Download kubectl-common from [the releases page.](https://github.com/tkporter/kubectl-common/releases)
+
+Once you've expanded the `.tar.gz`, move `kubectl-common` to somewhere in your
+$PATH. The easiest way to use this tool is to move it to `/usr/local/bin/` and
+name it `kubectl` so it can be used exactly the same as an original `kubectl`.
+
 ## Alias Configuration
 
 Aliases are defined in an `alias-config.json` file. Here's an example of what

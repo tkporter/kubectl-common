@@ -1,2 +1,4 @@
-# Don't ship with the executable!
+# Don't ship with the executable from testing
 kube-common
+# And don't ship with any built stuff from goreleaser
+dist
