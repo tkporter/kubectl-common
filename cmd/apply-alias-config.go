@@ -3,8 +3,8 @@ package cmd
 import (
   "fmt"
 
-  aliasConfig "github.com/tkporter/kubectl-common/src/alias-config"
-  internalConfig "github.com/tkporter/kubectl-common/src/internal-config"
+  aliasConfig "github.com/tkporter/kubectl-common/alias-config"
+  internalConfig "github.com/tkporter/kubectl-common/internal-config"
 
   "github.com/spf13/cobra"
 )
