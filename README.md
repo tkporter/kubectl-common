@@ -15,6 +15,8 @@ terminals (if using env variable KUBECONFIG), and verbose if explicitly using th
 Using different kubectl command names for different versions is annoying and
 easy to mess up.
 
+Note: as of now, only MacOS has been tested.
+
 ## Installing
 
 Download kubectl-common from [the releases page.](https://github.com/tkporter/kubectl-common/releases)
