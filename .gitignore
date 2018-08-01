@@ -1,4 +1,4 @@
 # Don't ship with the executable from testing
-kube-common
+kubectl-common
 # And don't ship with any built stuff from goreleaser
 dist
