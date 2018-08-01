@@ -101,16 +101,6 @@ $ kubectl-common get deployments
 # things
 ```
 
-### Quirks
-
-`kubectl-common --help` will show the help for `kubectl-common`, rather than
-that of `kubectl`.
-
-If you want to view `kubectl`'s help message, use `kubectl-common -- --help`.
-
-This includes if you want to view a help message for a command in `kubectl`:
-`kubectl-common -- get --help`.
-
 ### Next Steps
 
 Short term goals:
