@@ -16,6 +16,7 @@ var RootCmd = &cobra.Command{
   Long: "A wrapper of kubectl for managing different client versions.",
   Args: cobra.ArbitraryArgs,
   Run: runKubectlCommand,
+  DisableFlagParsing: true,
 }
 
 func Execute() {
