@@ -4,7 +4,7 @@ import (
   "fmt"
   "os"
 
-  internalConfig "github.com/tkporter/kubectl-common/internal-config"
+  internalConfig "github.com/tkporter/kubectl-common/pkg/internal-config"
 
   "github.com/spf13/cobra"
 )

@@ -7,8 +7,8 @@ import (
   "os"
   "path"
 
-  aliasConfig "github.com/tkporter/kubectl-common/alias-config"
-  genericConfig "github.com/tkporter/kubectl-common/generic-config"
+  aliasConfig "github.com/tkporter/kubectl-common/pkg/alias-config"
+  genericConfig "github.com/tkporter/kubectl-common/pkg/generic-config"
 
   "github.com/spf13/viper"
 )

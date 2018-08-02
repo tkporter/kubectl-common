@@ -4,8 +4,8 @@ import (
   "fmt"
   "os"
 
-  internalConfig "github.com/tkporter/kubectl-common/internal-config"
-  kubectlManager "github.com/tkporter/kubectl-common/kubectl-manager"
+  internalConfig "github.com/tkporter/kubectl-common/pkg/internal-config"
+  kubectlManager "github.com/tkporter/kubectl-common/pkg/kubectl-manager"
 
   "github.com/spf13/cobra"
 )

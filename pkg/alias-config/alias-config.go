@@ -4,8 +4,8 @@ import (
   "fmt"
   "path"
 
-  genericConfig "github.com/tkporter/kubectl-common/generic-config"
-  kubectlManager "github.com/tkporter/kubectl-common/kubectl-manager"
+  genericConfig "github.com/tkporter/kubectl-common/pkg/generic-config"
+  kubectlManager "github.com/tkporter/kubectl-common/pkg/kubectl-manager"
 
   "github.com/spf13/viper"
 )
