@@ -110,6 +110,6 @@ Short term goals:
 * Support & test on platforms other than macOS
 * Allow `~` usage in the alias config for kubeconfigs. This has to do with
 the way we're executing the actual kubectl command because bash is required to
-replacing `~` with `$HOME`.
+replace `~` with `$HOME`.
 * Add flag to `apply-alias-config` to determine where to store kubectl versions
 that are copied or downloaded.
